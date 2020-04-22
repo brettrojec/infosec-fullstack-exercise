@@ -35,7 +35,7 @@ function SearchForm(props){
 
 function Country(props){
     return(
-        <div class="card p-2 m-3">
+        <div class="card p-2 m-3 bg-light">
             <h3>{props.name}</h3>
             <div class="row">
                 <div class="col-6">
@@ -61,16 +61,47 @@ function CountryList(props){
 }
 
 function Region(props){
-    //let total=0;
+    console.log('Region data');
+    console.log(props);
+    const sum_func = (total, current) => total+current[1];
+    let total=props.subRegions.reduce(sum_func,0);
     const subRegions=props.subRegions.map((subRegion) => 
-            <SubRegion key={subRegion.name} name={subRegion.name} value={subRegion.value} />
+        <SubRegion key={subRegion[0]} name={subRegion[0]} value={subRegion[1]} />
     );
     return(
         <div>
             <ul>
-            <strong>{props.name}: {props.total}</strong>
+            <strong>{props.name}: {total}</strong>
                 {subRegions}
             </ul>
+        </div>
+    )
+}
+
+function RegionList(props){
+    console.log('country list received by RegionList');
+    console.log(props.countries);
+    let regionCounts={};
+    for(const country of props.countries){
+        if(!regionCounts[country.region]){
+            regionCounts[country.region]={};
+        }
+        if(!regionCounts[country.region][country.subregion]){
+            regionCounts[country.region][country.subregion]=0;
+        }
+        regionCounts[country.region][country.subregion]++;
+    }
+    console.log('calculated region counts:');
+    console.log(regionCounts);
+    let regions=Object.keys(regionCounts).map((region)=>
+        <div class="col">
+            <Region key={region} name={region} subRegions={Object.entries(regionCounts[region])} />
+        </div>
+    )
+    return (
+        <div class="card bg-light mb-5 p-1">
+            <h3><strong>Region totals</strong></h3>
+            <div class="row">{regions}</div>
         </div>
     )
 }
@@ -90,7 +121,7 @@ class App extends React.Component{
     }
     handleInput(event){
         this.setState({searchTerm:event.target.value})
-        this.handleSubmit(event);
+        //this.handleSubmit(event); //this causes the page to send requests as the user types, updating real(ish) time.  It's pretty cool, but as you might expect, causes one or two errors, and a lot more network traffic
     }
     handleSubmit(event){
         const formData = new FormData();
@@ -112,26 +143,12 @@ class App extends React.Component{
             handleInput: this.handleInput,
             value: this.state.value
         }
-        let regionCounts={};
-        this.state.countries.forEach((country)=> {
-            if(!regionCounts[country.region]){
-                regionCounts[country.region]={};
-            }
-            if(!regionCounts[country.region][country.subregion]){
-                regionCounts[country.region][country.subregion]=0;
-            }
-            regionCounts[country.region][country.subregion]++;
-        }
-        );
         return(
             <div class="container">
                 <Header value="Country Search" />
                 <SearchForm {...formConfig} />
                 <CountryList countries={this.state.countries} />
-                <div class="card bg-light mb-5 p-1">
-                    <h3><strong>Region totals</strong></h3>
-                    <Region name="Americas" total={3} subRegions={[{name:"Northern America", value:2},{name:"Central America",value:1}]} />
-                </div>
+                <RegionList countries={this.state.countries} />
             </div>
         )
     }

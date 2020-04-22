@@ -2,7 +2,7 @@
 $URL_BASE='https://restcountries.eu/rest/v2/';
 $URL_NAME=$URL_BASE . 'name/';
 $URL_CODE=$URL_BASE . 'alpha/';
-$URL_PARAMS='?fields=alpha2Code;alpha3Code;flag;region;subregion;name;population';
+$URL_PARAMS='?fields=alpha2Code;alpha3Code;flag;region;subregion;name;population;languages';
 
 function pop_sort($a, $b){
     return $a['population']<=$b['population'] ? 1 : -1;
