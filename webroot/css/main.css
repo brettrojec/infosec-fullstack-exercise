@@ -1,14 +1,6 @@
 /*
 This css file is a placeholder. Use this or roll your own, choice is yours.
 */
-form {
-    width:80%;
-}
-
-input{
-    width: 100%;
-}
-
-.error{
-    color: red;
+.indent-1{
+    text-indent: 2%;
 }
