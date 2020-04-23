@@ -18,18 +18,54 @@ curl_setopt_array($api_request, array(
     CURLOPT_CUSTOMREQUEST => "GET"
 ));
 
-$response=json_decode(curl_exec($api_request),true);
+$country_list=[];
+$response=curl_exec($api_request);
+if(curl_getinfo($api_request) && curl_getinfo($api_request)["http_code"]!=404){
+    $country_list=json_decode($response,true);
+}
 
 if(2<=strlen($searchTerm) && strlen($searchTerm)<=3){
     curl_setopt($api_request, CURLOPT_URL, $URL_CODE . $searchTerm . $URL_PARAMS);
-    $response=array_merge($response,[json_decode(curl_exec($api_request),true)]);
+    $code_response = curl_exec($api_request);
+    if(curl_getinfo($api_request) && curl_getinfo($api_request)["http_code"]!=404){
+        $country_list=array_merge($country_list,[json_decode($code_response,true)]);
+    }
 }
 
-$response=array_unique($response,SORT_REGULAR);
-usort($response, "pop_sort");
+$country_list=array_unique($country_list,SORT_REGULAR);
+usort($country_list, "pop_sort");
+
+foreach($country_list as &$country){
+    foreach(["region","subregion"] as $section){
+        if($country[$section]==""){
+            $country[$section]="None";
+        }
+    }
+    $langStr = "";
+    for($x=0; $x<count($country["languages"]); $x++){
+        //$name = $country["langauges"][$x]["name"];  
+        //$nativeName=$country["langauges"][$x]["nativeName"];
+        //$langStr .= $country["languages"][$x]["nativeName"] . " (" . $country["languages"][$x]["name"] . ")";
+        //echo $country["languages"][$x]["name"] . " (" . $country["languages"][$x]["nativeName"] . ")";
+        unset($country["languages"][$x]["iso639_1"]);
+        unset($country["languages"][$x]["iso639_2"]);
+        /*if(strcmp($country["langauges"][$x]["name"], $country["langauges"][$x]["nativeName"])==0){
+            $langStr .= $country["langauges"][$x]["name"];
+        }else{
+            $langStr .= sprintf("%s (%s)", $country["languages"][$x]["nativeName"], $country["langauges"][$x]["name"]);
+        }
+
+        if($x < (count($country["languages"])-1)){
+            $langStr .= ", ";
+        }*/
+    }
+    //echo $langStr;
+    //$country["languages"]=$langStr;
+}
+unset($country);
 
 echo json_encode([
-    "response"=>$response,
+    "response"=>$country_list,
     "searched_url"=>curl_getinfo($api_request, CURLINFO_EFFECTIVE_URL),
 ]);
 
