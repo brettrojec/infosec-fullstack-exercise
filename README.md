@@ -1,6 +1,7 @@
 Brett Rojec fullstack project
 
 ===============================================================================
+
 Starting the server
 
 The server can be run one of two ways:
