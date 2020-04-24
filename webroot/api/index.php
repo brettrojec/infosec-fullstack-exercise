@@ -43,30 +43,15 @@ foreach($country_list as &$country){
     }
     $langStr = "";
     for($x=0; $x<count($country["languages"]); $x++){
-        //$name = $country["langauges"][$x]["name"];  
-        //$nativeName=$country["langauges"][$x]["nativeName"];
-        //$langStr .= $country["languages"][$x]["nativeName"] . " (" . $country["languages"][$x]["name"] . ")";
-        //echo $country["languages"][$x]["name"] . " (" . $country["languages"][$x]["nativeName"] . ")";
         unset($country["languages"][$x]["iso639_1"]);
         unset($country["languages"][$x]["iso639_2"]);
-        /*if(strcmp($country["langauges"][$x]["name"], $country["langauges"][$x]["nativeName"])==0){
-            $langStr .= $country["langauges"][$x]["name"];
-        }else{
-            $langStr .= sprintf("%s (%s)", $country["languages"][$x]["nativeName"], $country["langauges"][$x]["name"]);
-        }
-
-        if($x < (count($country["languages"])-1)){
-            $langStr .= ", ";
-        }*/
     }
-    //echo $langStr;
-    //$country["languages"]=$langStr;
+
 }
 unset($country);
 
 echo json_encode([
     "response"=>$country_list,
-    "searched_url"=>curl_getinfo($api_request, CURLINFO_EFFECTIVE_URL),
 ]);
 
 curl_close($api_request);
