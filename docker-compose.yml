@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  php:
+    image: php
+    volumes:
+      - type: bind
+        source: ./infosec-fullstack-exercise
+        target: /app
+    ports:
+      - 8765:8765
+    command: ["/app/server","/app"]
