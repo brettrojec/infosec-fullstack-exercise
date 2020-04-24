@@ -1,5 +1,6 @@
 Brett Rojec fullstack project
 
+index.html visible under webroot/.  Live version available at the website above (fullstack.dev.rojec.org).
 
 ===============================================================================
 
