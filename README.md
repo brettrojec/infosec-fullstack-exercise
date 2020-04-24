@@ -1,5 +1,6 @@
 Brett Rojec fullstack project
 
+
 ===============================================================================
 
 Starting the server
@@ -12,11 +13,14 @@ The server can be run one of two ways:
     as such, running with ./server . should get it started.  If using this method, make sure you have php-curl installed (e.g. sudo apt-get install php-curl on Ubuntu)
 
 ===============================================================================
+
 Github
 
 This was developed in a private repo to prevent cheating.  The repo has been made public in line with the exercise specification, but may not link to the original template repo.
 
+
 ===============================================================================
+
 Design & code notes/comments
 
 I used an in-browser react compiler for this, as it seemed an easier way to get started with writing.  I have a npm build copy as well, which has not been tested.
