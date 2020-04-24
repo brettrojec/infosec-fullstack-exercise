@@ -52,6 +52,6 @@ unset($country);
 
 echo json_encode([
     "response"=>$country_list,
-]);
+""]);
 
 curl_close($api_request);
